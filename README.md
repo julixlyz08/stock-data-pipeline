@@ -95,18 +95,14 @@ The project includes queries that calculate:
 ## Repository structure
 
 ```text
-intel-stock-analytics/
-├── README.md
-├── src/
-│   └── intc_stock_analysis.py
-├── data/
-│   └── intc_stock_data.db
-├── docs/
-│   ├── project_report.pdf
-│   ├── presentation.pdf
-│   └── flowchart.png
-├── requirements.txt
-├── .env.example
+stock-data-pipeline/
+├── README.md                # project overview (this file)
+├── INTC_python.py           # the full pipeline: API → metrics → signals → SQLite → SQL report
+├── intc_stock_data.db       # SQLite database produced by the script (see note below)
+├── INTC_flowchart.png       # flowchart of the algorithm
+├── project_presentation.pdf # written project report
+├── requirements.txt         # Python packages needed
+├── .env.example             # template for your API key
 └── .gitignore
 ```
 
@@ -115,8 +111,8 @@ intel-stock-analytics/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/intel-stock-analytics.git
-cd intel-stock-analytics
+git clone https://github.com/julixlyz08/stock-data-pipeline.git
+cd stock-data-pipeline
 ```
 
 ### 2. Create a virtual environment
@@ -149,7 +145,7 @@ cp .env.example .env
 Then add your own Alpha Vantage key:
 
 ```text
-API_KEY=your_api_key_here
+ALPHAVANTAGE_API_KEY=your_api_key_here
 ```
 
 The `.env` file is ignored by Git and must never be uploaded to GitHub.
@@ -157,10 +153,21 @@ The `.env` file is ignored by Git and must never be uploaded to GitHub.
 ### 5. Run the analysis
 
 ```bash
-python src/intc_stock_analysis.py
+python INTC_python.py
 ```
 
 The program retrieves the most recent available records, calculates the metrics, prints a summary report, saves the processed records to SQLite, and runs the SQL analyses.
+
+## Results
+
+The written report covers the 100 most recent trading days ending May 8, 2026:
+
+- INTC more than tripled, from a low close of $39.37 to $124.92 on May 8.
+- 52 of 100 trading days were classified as High volatility, 46 as Moderate, and only 2 as Low.
+- The system generated 49 Hold, 35 Sell, and 16 Buy signals.
+- The most recent signal was **Hold**: positive momentum, but volatility too high to justify buying.
+
+**About the database file:** `intc_stock_data.db` holds records from later runs (December 17, 2025 to May 14, 2026), so its counts differ slightly from the report. Because the script always pulls the 100 most recent trading days, running it today will produce a new, different snapshot.
 
 ## Limitations
 
